@@ -19,7 +19,7 @@ def launch_ssh(token,
                remote_addr=None):
 
     # Deprecation Warning
-    print("""Warning: Due to some issues with ngrok on Google Colab, reported in the issue https://github.com/WassimBenzarti/colab-ssh/issues/45, 
+    print("""Warning: Due to some issues with ngrok on Google Colab, reported in the issue https://github.com/WassimBenzarti/colab-ssh/issues/45,
 we highly recommend that update your code by following this documentation https://github.com/WassimBenzarti/colab-ssh#getting-started""")
 
     # Ensure the ngrok auth token is not empty
@@ -52,13 +52,21 @@ we highly recommend that update your code by following this documentation https:
     if password:
         os.system('echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config')
 
-    expose_env_variable("LD_LIBRARY_PATH")
-    expose_env_variable("COLAB_TPU_ADDR")
-    expose_env_variable("COLAB_GPU")
-    expose_env_variable("TBE_CREDS_ADDR")
-    expose_env_variable("TF_FORCE_GPU_ALLOW_GROWTH")
-    expose_env_variable("TPU_NAME")
-    expose_env_variable("XRT_TPU_CONFIG")
+    needed_vars = [
+        "COLAB_GPU",
+        "COLAB_TPU_ADDR",
+        "GCS_READ_CACHE_BLOCK_SIZE_MB",
+        "HOSTNAME",
+        "LD_LIBRARY_PATH",
+        "NO_GCE_CHECK",
+        "TBE_CREDS_ADDR",
+        "TF_FORCE_GPU_ALLOW_GROWTH",
+        "TF2_BEHAVIOR",
+        "TPU_NAME",
+        "XRT_TPU_CONFIG"
+    ]
+    for var in needed_vars:
+        expose_env_variable(var)
 
     os.system('/usr/sbin/sshd -D &')
 

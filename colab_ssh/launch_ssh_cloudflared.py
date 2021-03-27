@@ -44,13 +44,21 @@ def launch_ssh_cloudflared(
     if password:
         os.system('echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config')
 
-    expose_env_variable("LD_LIBRARY_PATH")
-    expose_env_variable("COLAB_TPU_ADDR")
-    expose_env_variable("COLAB_GPU")
-    expose_env_variable("TBE_CREDS_ADDR")
-    expose_env_variable("TF_FORCE_GPU_ALLOW_GROWTH")
-    expose_env_variable("TPU_NAME")
-    expose_env_variable("XRT_TPU_CONFIG")
+    needed_vars = [
+        "COLAB_GPU",
+        "COLAB_TPU_ADDR",
+        "GCS_READ_CACHE_BLOCK_SIZE_MB",
+        "HOSTNAME",
+        "LD_LIBRARY_PATH",
+        "NO_GCE_CHECK",
+        "TBE_CREDS_ADDR",
+        "TF_FORCE_GPU_ALLOW_GROWTH",
+        "TF2_BEHAVIOR",
+        "TPU_NAME",
+        "XRT_TPU_CONFIG"
+    ]
+    for var in needed_vars:
+        expose_env_variable(var)
 
     os.system('service ssh start')
 
